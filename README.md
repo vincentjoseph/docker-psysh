@@ -1,6 +1,6 @@
-# Docker Psysh (PHP REPL)
+# Docker PsySH (PHP REPL)
 
-## Build
+## Requirements
 
 ```
 docker build -t aw/psysh .
@@ -12,6 +12,16 @@ docker build -t aw/psysh .
 docker run --rm -it aw/psysh <option>
 ```
 
+## Enjoy PsySH history feature
+Create a named (ex: `aw_psysh`) container based on `aw/psysh` image :
+```
+docker create --name aw_psysh aw/psysh
+```
+Start the same container each time you are using PsySH :
+```
+docker start -i aw_psysh <option>
+```
+
 ## Install alias :
 
 Create file : `/usr/local/bin/psysh` :
@@ -19,14 +29,12 @@ Create file : `/usr/local/bin/psysh` :
 ```
 #!/usr/bin/env bash
 
-command -v docker >/dev/null 2>&1 || { echo >&2 "Command docker is required.  Aborting."; exit 1; }
-
 CONTAINER_NAME=aw_psysh
 
 # because we always want the same container to keep psysh history.
-docker start -i $CONTAINER_NAME 2> /dev/null
+docker start -i $CONTAINER_NAME ${*} 2> /dev/null
 if [ "$?" != "0" ]; then
-    docker run -it --name $CONTAINER_NAME aw/psysh
+    docker run -it --name $CONTAINER_NAME aw/psysh ${*}
 fi
 ```
 
