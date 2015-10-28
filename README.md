@@ -15,7 +15,7 @@ docker run --rm -it aw/psysh <option>
 ## Enjoy PsySH history feature
 Create a named (ex: `aw_psysh`) container based on `aw/psysh` image :
 ```
-docker create --name aw_psysh aw/psysh
+docker create -ti --name aw_psysh aw/psysh
 ```
 Start the same container each time you are using PsySH :
 ```
