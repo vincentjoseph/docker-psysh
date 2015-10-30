@@ -1,4 +1,6 @@
-# Docker PsySH (PHP REPL)
+# Docker PsySH
+
+Docker image for [PsySH php REPL](http://psysh.org)
 
 ## Requirements
 
@@ -13,13 +15,18 @@ docker run --rm -it aw/psysh <option>
 ```
 
 ## Enjoy PsySH history feature
+
 Create a named (ex: `aw_psysh`) container based on `aw/psysh` image :
 ```
 docker create -ti --name aw_psysh aw/psysh
 ```
-Start the same container each time you are using PsySH :
+Start the same container :
 ```
-docker start -i aw_psysh <option>
+docker start aw_psysh
+```
+exec the container each time you want to use PsySH
+```
+docker exec -ti aw_psysh psysh <option>
 ```
 
 ## Install alias :
@@ -30,12 +37,41 @@ Create file : `/usr/local/bin/psysh` :
 #!/usr/bin/env bash
 
 CONTAINER_NAME=aw_psysh
+PHP_MANUAL_LANGUAGE=fr
 
-# because we always want the same container to keep psysh history.
-docker start -i $CONTAINER_NAME ${*} 2> /dev/null
-if [ "$?" != "0" ]; then
-    docker run -it --name $CONTAINER_NAME aw/psysh ${*}
+function isContainerNotExists {
+    for container in $(docker ps -a | awk '{print $NF}')
+    do
+        if [[ "$1" = "$container" ]]; then
+            return 1
+        fi
+    done
+
+    return 0
+}
+
+function isContainerNotRunning {
+    for container in $(docker ps | awk '{print $NF}')
+    do
+        if [[ "$1" = "$container" ]]; then
+            return 1
+        fi
+    done
+
+    return 0
+}
+
+# because we want to keep history between each instance.
+if isContainerNotExists $CONTAINER_NAME; then
+    docker create -e PHP_MANUAL_LANGUAGE=$PHP_MANUAL_LANGUAGE -ti --name $CONTAINER_NAME aw/psysh 1> /dev/null
 fi
+
+if isContainerNotRunning $CONTAINER_NAME; then
+    docker start $CONTAINER_NAME 1> /dev/null
+fi
+
+docker exec -ti $CONTAINER_NAME php psysh ${*}
+
 ```
 
 add perms :
