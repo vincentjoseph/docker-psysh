@@ -8,6 +8,11 @@ Docker image for [PsySH php REPL](http://psysh.org)
 docker build -t aw/psysh .
 ```
 
+## Environment variables
+
+- `PHP_MANUAL_LANGUAGE` (default: `en`)
+
+
 ## Simple Usage
 
 ```
