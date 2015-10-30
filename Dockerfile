@@ -1,11 +1,16 @@
 FROM php:5.6
 
-RUN apt-get update && apt-get install -y git zlib1g-dev && rm -rf /var/lib/apt/lists/*
+ENV PHP_MANUAL_LANGUAGE en
+
+RUN apt-get update && apt-get install -y git zlib1g-dev wget && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install zip
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
-RUN composer.phar global require psy/psysh:~0.5
+RUN composer.phar global require psy/psysh:@stable
+RUN mkdir -p $HOME/.local/share/psysh
 
 COPY files/entrypoint.sh /entrypoint.sh
+
+WORKDIR /root/.composer/vendor/bin
 
 ENTRYPOINT ["/entrypoint.sh"]
