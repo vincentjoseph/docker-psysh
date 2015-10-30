@@ -1,6 +1,6 @@
 # Docker PsySH
 
-Docker image for [PsySH php REPL](http://psysh.org)
+Docker image for [PsySH](http://psysh.org) php REPL.
 
 ## Requirements
 
@@ -29,9 +29,9 @@ Start the same container :
 ```
 docker start aw_psysh
 ```
-exec the container each time you want to use PsySH
+Execute the container each time you want to use PsySH :
 ```
-docker exec -ti aw_psysh psysh <option>
+docker exec -ti aw_psysh php psysh <option>
 ```
 
 ## Install alias :
