@@ -1,0 +1,29 @@
+FROM php:%%VERSION%%
+MAINTAINER Vincent JOSEPH <vincent.joseph@protonmail.com>
+
+ENV PHP_MANUAL_LANGUAGE en
+ENV PSYSH_HISTORY_SIZE 0
+ENV PSYSH_ERASE_DUPLICATES true
+ENV PSYSH_USE_PCNTL true
+ENV PSYSH_USE_READLINE true
+ENV PSYSH_REQUIRE_SEMICOLONS false
+ENV PSYSH_TAB_COMPLETION true
+ENV PSYSH_WARN_ON_MULTIPLE_CONFIGS false
+
+ADD http://psysh.org/psysh /usr/local/bin/psysh
+RUN chmod 555 /usr/local/bin/psysh
+
+ADD http://psysh.org/manual/en/php_manual.sqlite /data/en/php_manual.sqlite
+ADD http://psysh.org/manual/fr/php_manual.sqlite /data/fr/php_manual.sqlite
+RUN chmod -R 555 /data
+RUN mkdir /config
+
+COPY conf/config.php /config.php
+RUN chmod 666 /config.php
+
+COPY docker-entrypoint.sh /psysh-entrypoint.sh
+RUN chmod +x /psysh-entrypoint.sh
+
+ENTRYPOINT ["/psysh-entrypoint.sh"]
+
+CMD ["psysh"]

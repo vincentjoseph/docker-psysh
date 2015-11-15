@@ -1,6 +1,30 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-docker build -t aw/psysh:5.4 5.4
-docker build -t aw/psysh:5.5 5.5
-docker build -t aw/psysh:5.6 5.6
-docker build -t aw/psysh 5.6
+set -e
+
+function contains {
+    for a in $1; do
+        if [[ "$2" = "$a" ]];then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+availables="5.4 5.5 5.6 7.0 latest"
+for version in $@; do
+    if ! contains "$availables" "$version"; then
+        echo >&2 "$version not supported. Ignored."
+        continue
+    fi
+
+    set -x
+    mkdir $version
+    cp -r conf $version/
+    cp docker-entrypoint.sh $version/
+    sed "s/%%VERSION%%/$version/g" Dockerfile.template > "$version/Dockerfile"
+
+    docker build -t psy/psysh:$version $version
+    rm -fr $version
+done
