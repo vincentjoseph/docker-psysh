@@ -4,7 +4,7 @@ set -e
 
 function contains {
     for a in $1; do
-        if [[ "$2" = "$a" ]];then
+        if [[ "$2" = $a ]];then
             return 0
         fi
     done
@@ -13,6 +13,10 @@ function contains {
 }
 
 availables="5.4 5.5 5.6 7.0 latest"
+if [ "$1" = "all" ]; then
+    set -- "$availables"
+fi
+
 for version in $@; do
     if ! contains "$availables" "$version"; then
         echo >&2 "$version not supported. Ignored."

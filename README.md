@@ -4,9 +4,13 @@ Docker image for [PsySH](http://psysh.org) php REPL.
 
 ## Requirements
 
-Build psysh with wanted php version (availables : `5.4`|`5.5`|`5.6`|`7.0`|`latest`)
+Build psysh with wanted php version (available: `5.4`|`5.5`|`5.6`|`7.0`|`latest`)
 ```
-bash build.sh 5.4 5.5 5.6 7.0 latest
+bash build.sh all
+```
+or
+```
+bash build.sh 5.4 5.6
 ```
 
 ## Environment variables
