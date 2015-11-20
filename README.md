@@ -60,3 +60,7 @@ add perms :
 ```
 chmod +x /usr/local/bin/psysh
 ```
+
+## License
+
+View [LICENSE](LICENSE) for the software contained in this image.
